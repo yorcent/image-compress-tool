@@ -1,0 +1,12 @@
+{
+  "name": "image-compress-tool",
+  "version": "1.0.0",
+  "description": "A package for compressing a large image to a small size image",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["js", "compress", "image"],
+  "author": "Yorcent Luo",
+  "license": "ISC"
+}
