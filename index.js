@@ -1,5 +1,5 @@
 /*
- * @LastEditTime: 2021-05-12 16:54:30
+ * @LastEditTime: 2021-05-19 16:54:13
  * @LastEditors: Please set LastEditors
  * @Description: 图片处理相关方法
  * @FilePath: \light_monitor_web\src\utils\imageCompress.js
@@ -21,7 +21,6 @@ function compress(img, orientation, compressType, quality, imageFomate, returnTy
     //瓦片canvas
     let tCanvas = document.createElement("canvas")
     let tctx = tCanvas.getContext("2d")
-    let initSize = img.src.length
     let width = compressType ? compressType : img.width
     let height = compressType ? compressType * (img.height / img.width).toFixed(3) : img.height
     // 如果图片大于四百万像素，计算压缩比并将大小压至400万以下
@@ -75,20 +74,20 @@ function compress(img, orientation, compressType, quality, imageFomate, returnTy
     }
     // 进行压缩
     if (returnType === 'base64Url') {
-      let ndata = canvas.toDataURL(imageFomate, quality) // 第一个参数是图片格式，如：image/png; 第二个参数代表压缩后的图片质量，数值越小，代表压缩后的图片质量越低，大小约小
-      console.log('压缩前：' + initSize)
+      let ndata = canvas.toDataURL(imageFomate, quality) // 第一个参数是图片格式，如：image/png; 第二个参数代表压缩后的图片质量，数值越小，代表压缩后的图片质量越低，大小越小
+      console.log('压缩前：' + img.src.length)
       console.log('压缩后：' + ndata.length)
-      console.log('压缩率：' + ~~(100 * (initSize - ndata.length) / initSize) + "%")
+      console.log('压缩率：' + ~~(100 * (img.src.length - ndata.length) / img.src.length) + "%")
       tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0
-      cb(ndata)
+      cb(ndata, ndata.length)
     } else if (returnType === 'blob') {
       canvas.toBlob((blob) => {
-        console.log('压缩前：' + initSize)
+        console.log('压缩前：' + img.raw.size) // 这个时候的压缩率不太准确，因为initSize算得是原图的base64的长度
         console.log('压缩后：' + blob.size)
-        console.log('压缩率：' + ~~(100 * (initSize - blob.size) / initSize) + "%")
+        console.log('压缩率：' + ~~(100 * (img.raw.size - blob.size) / img.raw.size) + "%")
         tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0
-        cb(blob)
-      }, 'image/jpeg', quality)
+        cb(blob, blob.size)
+      }, imageFomate, quality)
     }
 }
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: lcr
  * @Date: 2021-05-08 14:30:16
- * @LastEditTime: 2021-05-12 17:12:07
+ * @LastEditTime: 2021-05-19 17:38:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \imageCompressTool\test.html
@@ -16,13 +16,19 @@
     <style>
         .originImage {
             width: 300px;
-            height: 00px;
+            height: 300px;
         }
         .compressImage {
             width: auto;
+            display: block;
         }
         .fileTip {
             color: red;
+        }
+        .infoLabel {
+            color: red;
+            height: 40px;
+            width: auto;
         }
     </style>
   </head>
@@ -34,32 +40,35 @@
       <input id="inputFile" type="file" name="file" onchange="handleFileChange()">
       <div class="fileTip"></div>
       <img class="originImage">
+      <div class="infoLabel"></div>
       <img class="compressImage">
     </div>
     <script type="text/javascript" src="./index.js"></script>
     <script>
         var fileTip = document.getElementsByClassName('fileTip')
+        var infoLabel = document.getElementsByClassName('infoLabel')
         var originImage = document.getElementsByClassName('originImage')
-        var smallImage = document.getElementsByClassName('compressImage')
+        var compressImage = document.getElementsByClassName('compressImage')
         var inputFile = document.getElementById('inputFile')
         function handleFileChange ()  {
             const files = inputFile.files
             if(files && files[0]) {
                 const file = files[0]
+                var formatArr = ['jpg', 'png', 'jpeg']
+                if (!file.type.split('image/')[1] || !formatArr.includes(file.type.split('image/')[1].toLowerCase())) {
+                    fileTip[0].innerHTML = '上传图片只能是jpg/jpeg/png格式!'
+                    return false
+                }
                 blob2Base64(file, function (base64Data) { // blob 转base64
-                    var formatArr = ['jpg', 'png', 'jpeg']
-                    if (!file.type.split('image/')[1] || !formatArr.includes(file.type.split('image/')[1].toLowerCase())) {
-                        fileTip.innerHTML = '上传图片只能是jpg/jpeg/png格式!'
-                        return false
-                    }
+                    let img = new Image()
+                    img.src = base64Data
+                    img.raw = file
                     originImage[0].src = base64Data
-                    if (base64Data.length > (500 * 1024)) { // 图片大小大于500K就压缩
-                        fileTip.innerHTML = ''
-                        const img = new Image()
-                        img.src = base64Data
-                        const timout = setTimeout(() => {
-                            var imageDataType = 'blob'
-                            compress(img, 1, 600, 0.5, file.type, imageDataType, function (data) {
+                    const timout = setTimeout(() => {
+                        if (file.size > (500 * 1024) || img.width > 600) { // // 图片大小大于500K或宽度大于600px就压缩
+                            fileTip[0].innerHTML = ''
+                            var imageDataType = 'base64Url' // blob 或者 base64Url
+                            compress(img, 1, 600, 1, file.type, imageDataType, function (data, size) {
                                 if (imageDataType === 'base64Url') {
                                     data = base642Blob(data) // base64转blob
                                 }
@@ -67,17 +76,19 @@
                                 //   [imgBlob],
                                 //   file.name
                                 // )
+                                infoLabel[0].innerHTML = `压缩前：${imageDataType === 'blob' ? file.size : base64Data.length} B; 压缩后：${size} B; 压缩率：${imageDataType === 'blob' ? ~~(100 * (file.size - size)/file.size) : ~~(100 * (base64Data.length - size)/base64Data.length)}%` // 大小统计需和文件转换之后的类型保持一致；blob和base64格式统计出来的数据大小是不一样的
                                 file.raw = data // 后端接口需要将文件blob格式的数据放到file.raw中
                                 file.url = URL.createObjectURL(data)
-                                smallImage[0].src = file.url
+                                compressImage[0].src = file.url
                                 clearTimeout(timout)
                             })
-                        }, 500) // 延时添加用来给压缩过程留一些时间，否则会出现压缩失效的情况
-                    } else {
-                        file.base64 = base64Data
-                        smallImage[0].src = base64Data
-                        file.url = URL.createObjectURL(file.raw)
-                    }
+                        } else {
+                            file.base64 = base64Data
+                            infoLabel[0].innerHTML = '图片未达到压缩条件'
+                            compressImage[0].src = base64Data
+                            file.url = URL.createObjectURL(file.raw)
+                        }
+                    }, 500) // 延时添加用来给压缩过程留一些时间，否则会出现压缩失效的情况
                 })
             }
         }
