@@ -1,7 +1,7 @@
 {
-  "name": "image-compress-tool",
+  "name": "image-compress-tool-full",
   "version": "1.0.0",
-  "description": "A package for compressing a large image to a small size image",
+  "description": "A js module for compressing a large image to a small size or fixed width image",
   "main": "index.js",
   "repository": "https://github.com/yorcent/image-compress-tool.git",
   "scripts": {

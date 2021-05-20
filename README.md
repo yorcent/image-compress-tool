@@ -1,10 +1,10 @@
 # image-compress-tool
 
-A package for compressing a large image to a small size image
+A js module for compressing a large image to a small size or fixed width image
 
 # install
 
-npm install -g image-compress-tool
+npm install -g image-compress-tool-full
 
 # usage
 
@@ -14,7 +14,7 @@ npm install -g image-compress-tool
 ## 模拟tesh.html中的样例，上传文件调用方法
 
 ### compress(img, 1, 600, 1, file.type, imageDataType, function (data, size) {
-}
+})
 
 #### params description:
 /**
