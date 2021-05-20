@@ -15,7 +15,8 @@ npm install -g image-compress-tool
 
 ### compress(img, 1, 600, 1, file.type, imageDataType, function (data, size) {
 }
-params description:
+
+#### params description:
 /**
      * @description: 图片压缩函数
      * @param {*} img(Image)： Image 格式的image源文件
