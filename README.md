@@ -8,10 +8,12 @@ npm install -g image-compress-tool
 
 # usage
 
-引入index.js文件：
+## 引入index.js文件：
 <script type="text/javascript" src="./index.js"></script>
-模拟tesh.html中的样例，上传文件调用方法：
-compress(img, 1, 600, 1, file.type, imageDataType, function (data, size) {
+
+## 模拟tesh.html中的样例，上传文件调用方法
+
+### compress(img, 1, 600, 1, file.type, imageDataType, function (data, size) {
 }
 params description:
 /**
