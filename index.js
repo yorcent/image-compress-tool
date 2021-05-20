@@ -14,7 +14,7 @@
      * @param {*} returnType: 压缩后返回图片的类型，可选项为：base64  /blob
      * @param {*} cb: 回调
      * @return {*}
-     */
+**/
 function compress(img, orientation, compressType, quality, imageFomate, returnType, cb) {
     let canvas = document.createElement("canvas")
     let ctx = canvas.getContext('2d')

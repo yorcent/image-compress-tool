@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A package for compressing a large image to a small size image",
   "main": "index.js",
+  "repository": "https://github.com/yorcent/image-compress-tool.git",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
