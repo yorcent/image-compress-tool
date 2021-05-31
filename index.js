@@ -1,5 +1,5 @@
 /*
- * @LastEditTime: 2021-05-19 16:54:13
+ * @LastEditTime: 2021-05-31 17:36:37
  * @LastEditors: Please set LastEditors
  * @Description: 图片处理相关方法
  * @FilePath: \light_monitor_web\src\utils\imageCompress.js
@@ -116,4 +116,8 @@ function blob2Base64 (blob, cb) {
     }
 }
   
-  
+module.exports = {
+  compress,
+  base642Blob,
+  blob2Base64
+}
